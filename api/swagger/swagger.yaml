@@ -1,0 +1,869 @@
+swagger: "2.0"
+info:
+  version: "0.5.0"
+  title: 新学术网
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+# format of bodies a client can send (Content-Type)
+# consumes:
+#   - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+  #User
+  
+    #Login
+  /user/login:
+    # x-swagger-router-controller: user
+    post:
+      parameters:
+        - name: username
+          required: true
+          in: query
+          description: Login username
+          type: string
+        - name: password
+          required: true
+          in: query
+          description: Login password
+          type: string
+        # - name: login_obj
+        #   in: body
+        #   description: login object
+        #   schema:
+        #     $ref: "#/definitions/LoginRequest"
+      tags:
+        - User
+      responses:
+        "200":
+          description: login msg
+          schema: 
+            $ref: "#/definitions/OperationResponse"
+          
+  #登出
+  /user/logout:
+    # parameters:
+    post:
+      tags:
+        - User
+      responses:
+        default:
+          description: logout
+          schema:
+            $ref: "#/definitions/OperationResponse"
+        
+  #Register
+  /user/register:
+    post:
+      parameters:
+        - name: username
+          type: string
+          in: query
+          required: true
+        - name: password
+          type: string
+          in: query
+          required: true
+        - name: studentId
+          type: string
+          in: query
+          required: true
+      tags:
+        - User
+      responses:
+        "200":
+          description: if success, return user
+          schema: 
+            $ref: "#/definitions/User"
+        "x-1001":
+          description: username dulplicate
+          schema:
+            $ref: "#/definitions/OperationResponse"
+        "x-1002":
+          description: dulplicate studentId
+          schema:
+            $ref: "#/definitions/OperationResponse"
+        
+  #Mofify
+  #ResetPasswd
+  
+  #入门列表页
+
+  #获得首页最新活动右边入门推荐
+  #获得某学科的学科推荐
+  #获得某学科专题推荐
+  #获得某学科入门热门推荐
+  #获得入门的最新推荐
+  /basebooks/{tag}:
+    get:
+      tags:
+        - Basebook
+      parameters:
+        - name: tag
+          in: path
+          required: true
+          type: string
+          description: tag is some specific subject, such as literature for 中国语言文学 and all for all subjects
+        - name: start
+          in: query
+          required: true
+          type: number
+        - name: limit
+          in: query
+          required: true
+          type: number
+        - name: type
+          type: string
+          in: query
+          required: false
+          description: hot for 热门推荐, subject for 学科推荐, topic for 专题推荐. default operation is getting a list ordered by time.
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/BasebooksResponse" 
+    
+  #首发
+  
+  #获得首页最新首发
+  #获得首页推荐首发
+  #获得猜你喜欢首发推荐列表
+  /firstpubs/all:
+    get:
+      tags:
+        - Firstpub
+      parameters:
+        - name: start
+          type: number
+          in: query
+          required: true
+        - name: limit
+          type: number
+          in: query
+          required: true
+        - name: hot
+          type: boolean
+          in: query
+          required: false
+          description: default value is false
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/FirstpubsResponse"
+  
+  #获得论文首发推荐列表
+  #获得论文热门首发推荐列表
+  #获得论文最新首发推荐列表
+  /firstpubs/paper:
+    get:
+      tags:
+        - Firstpub
+      parameters:
+        - name: start
+          type: number
+          in: query
+          required: true
+        - name: limit
+          type: number
+          in: query
+          required: true
+        - name: hot
+          type: boolean
+          in: query
+          required: false
+          default: false
+          description: check whether getting recommended firstpub, default value is false
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/FirstpubsResponse"
+  
+  #获得观点首发推荐列表
+  #获得观点热门首发推荐列表
+  #获得观点最新首发推荐列表
+  /firstpubs/point:
+    get:
+      tags:
+        - Firstpub
+      parameters:
+        - name: start
+          type: number
+          in: query
+          required: true
+        - name: limit
+          type: number
+          in: query
+          required: true
+        - name: hot
+          type: boolean
+          in: query
+          required: false
+          default: false
+          description: check whether getting recommended firstpub, default value is false
+      responses:
+        "200":
+          description: Success
+          schema:
+            $ref: "#/definitions/FirstpubsResponse"
+  
+    
+    
+  #获得首发文章详细内容
+  /firstpub/{firstpub_id}:
+    get:
+      tags: 
+        - Firstpub
+      parameters:
+        - name: firstpub_id
+          type: string
+          in: path
+          required: true
+          description: firstpub id
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/Firstpub"
+    
+    
+  #获得首发文章作者信息
+  /author/firstpub/{firstpub_id}:
+    get:
+      tags:
+        - Author
+      parameters:
+        - name: firstpub_id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/Author"
+  #获得首发文章标签列表
+  /tags/firstppub/{firstpub_id}:
+    get:
+      tags:
+        - Tag
+      parameters:
+        - name: firstpub_id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/Tag"
+  
+  
+  
+  #收藏首发
+  /star/firstpub/{firstpub_id}:
+    post:
+      tags:
+        - Firstpub
+      parameters:
+        - name: Cookie
+          in: header
+          type: string
+          required: true
+          description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
+        - name: firstpub_id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/OperationResponse"
+  
+  #获得入门页中显示的热门问题
+  /questions/list:
+    get:
+      tags:
+        - Question
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/OperationResponse"
+  #首发的提问
+  /question:
+    post:
+      tags:
+        - Question
+      parameters:
+        - name: Cookie
+          in: header
+          type: string
+          required: true
+          description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
+        - name: question
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/QuestionRequest"
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/OperationResponse"
+  
+  
+  #评论首发
+  /comment:
+    post:
+      tags: 
+        - Comment
+      parameters:
+        - name: comment
+          in: body
+          required: true
+          schema:
+            $ref: "#/definitions/CommentRequest"
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/OperationResponse"
+  #获得首发的评论
+  /comments/firstpubs:
+    get:
+      tags:
+        - Comment
+      parameters:
+        - name: start
+          in: query
+          required: true
+          type: number
+        - name: limit
+          in: query
+          required: true
+          type: number
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/CommentsResponse"
+  #获得合作期刊列表
+  /journals:
+    get:
+      tags:
+        - Journal
+      parameters:
+        - name: start
+          in: query
+          required: true
+          type: number
+        - name: limit
+          in: query
+          required: true
+          type: number
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/JournalsResponse"
+    
+  #活动
+  
+  #获得首页最新活动列表
+  #活动活动页面推荐活动
+  #获得新学术活动列表
+  #获得外部活动
+  /activities/{tag}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: start
+          in: query
+          type: number
+          required: true
+        - name: limit
+          in: query
+          type: number
+          required: true
+        - name: tag
+          in: path
+          type: string
+          required: true
+          description: values are 'all', 'new_science', 'external'
+      responses:
+        "200":
+          description: success return
+          schema:
+            $ref: "#/definitions/ActivitiesResponse"
+  
+  #获得活动报道列表
+  /activity_record/activities:
+    get:
+      tags:
+        - ActivityRecord
+      parameters:
+        - name: start
+          in: query
+          type: number
+          required: true
+        - name: limit
+          in: query
+          type: number
+          required: true
+      responses:
+        "200":
+          description: success return
+          schema:
+            $ref: "#/definitions/RecordsResponse"
+  #活动报名
+  /activity/signup:
+    post:
+      tags:
+        - Activity
+      parameters:
+        - name: Cookie
+          in: header
+          type: string
+          required: true
+          description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
+        - name: username
+          in: query
+          required: true
+          type: string
+        - name: student_id
+          in: query
+          required: true
+          type: string
+        - name: institute
+          in: query
+          required: true
+          type: string
+          description: such as Software Engineering
+      responses:
+        "200":
+          description: success
+          schema: 
+            $ref: "#/definitions/OperationResponse"
+  
+  
+  #活动详情页面
+  #获得活动的海报
+  /activity/bill/{activity_id}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: activity_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: "#/definitions/BillResponse"
+    
+  #获得活动介绍
+  
+  /activity/info/{activity_id}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: activity_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/Activity"
+  #获得活动嘉宾
+  /activity/honorguest/{activity_id}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: activity_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/AgendaResponse"
+  #获得活动议程
+  /activity/agenda/{activity_id}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: activity_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/HonorsGuestResponse"
+  #获得活动合作单位及媒体
+  /activity/collaborator/{activity_id}:
+    get: 
+      tags:
+        - Activity
+      parameters:
+        - name: activity_id
+          in: path
+          required: true
+          type: string
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/CollaboratorsResponse"
+
+  # /swagger:
+  #   x-swagger-pipe: swagger_raw
+# complex objects have schema definitions
+definitions:
+
+  User: 
+    type: object
+    required:
+      - username
+      - password
+      - student_id
+    properties:
+      username:
+        type: string
+      password:
+        type: string
+      student_id:
+        type: string
+    
+  Firstpub:
+    type: object
+    required:
+      - title
+      - author
+      - source
+      - pub_date
+      - doi
+      - cover_img_url
+      - summary
+      - content
+      - type
+    properties:
+      title:
+        type: string
+      author:
+        type: string
+      source: 
+        type: string
+      pub_date:
+        type: string
+      doi:
+        type: string
+      cover_img_url:
+        type: string
+      summary:
+        type: string
+      content:
+        type: string
+      type: 
+        type: string
+    
+  Activity:
+    type: object
+    required:
+      - catena
+      - theme
+      - activity_time
+      - address
+      - bill_image_url
+      - summary
+      - state
+      - sponsor
+      - language
+      - target
+      - linkman
+      - phone
+      - email
+      - detail
+    properties:
+      catena:
+        type: string
+      theme:
+        type: string
+      activity_time:
+        type: string
+      address:
+        type: string
+      bill_image_url:
+        type: string
+      summary:
+        type: string
+      state:
+        type: string
+      sponsor:
+        type: string
+      language: 
+        type: string
+      target:
+        type: string
+      linkman:
+        type: string
+      phone:
+        type: string
+      email:
+        type: string
+      detail:
+        type: string
+    
+  Basebook:
+    type: object
+    required:
+      - subject
+      - type
+      - author
+      - pub_date
+      - summary
+      - title
+    properties:
+      subject:
+        type: string
+      type:
+        type: string
+      author:
+        type: string
+      pub_date:
+        type: string
+      summary:
+        type: string
+      title:
+        type: string
+    
+  Author:
+    type: object
+    required:
+      - name
+      - portrait
+      - position
+    properties:
+      name:
+        type: string
+      portrait:
+        type: string
+      position:
+        type: string
+    
+    
+  Tag:
+    type: object
+    required:
+      - content
+    properties:
+      content:
+        type: string
+    
+  # Question:
+  #   type: object
+    
+  Comment:
+    type: object
+    required:
+      - content
+      - username
+      - pub_date
+      - firstpub_id
+    properties:
+      content:
+        type: string
+      username:
+        type: string
+      pub_date:
+        type: string
+      firstpub_id:
+        type: number
+    
+  Journal:
+    type: object
+    required:
+      - image_url
+      - note
+    properties:
+      image_url:
+        type: string
+      note:
+        type: string
+    
+  ActivityRecord:
+    type: object
+    
+    
+  HonorGuest:
+    type: object
+    required:
+      - name
+      - description
+      - guest_url
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      guest_url:
+        type: string
+    
+    
+  #request
+  # LoginRequest:
+  #   required:
+  #     - username
+  #     - password
+  #   properties:
+  #     username:
+  #       type: string
+  #     password:
+  #       type: string
+    
+    
+  OperationResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+      
+  FirstpubSummary:
+    type: object
+  
+  FirstpubsResponse:
+    required:
+      - firstpubs
+    properties:
+      firstpubs:
+        type: array
+        items: 
+          $ref: "#/definitions/FirstpubSummary"
+          
+  ActivitySummary:
+    type: object
+          
+  ActivitiesResponse:
+    required:
+      - activities
+    properties:
+      activities:
+        type: array
+        items: 
+          $ref: "#/definitions/ActivitySummary"
+          
+  # ActivityResponse:
+  #   required:
+  #     - title
+  #   properties:
+  #     title:
+  #       type: string
+          
+  BasebooksResponse:
+    required:
+      - basebooks
+    properties:
+      basebooks:
+        type: array
+        items: 
+          $ref: "#/definitions/Basebook"
+          
+  CommentsResponse:
+    required:
+      - comments
+    properties:
+      comments:
+        type: array
+        items:
+          $ref: "#/definitions/Comment"
+          
+  JournalsResponse:
+    required:
+      - journals
+    properties:
+      journals:
+        type: array
+        items:
+          $ref: "#/definitions/Journal"
+          
+  RecordsResponse:
+    required:
+      - records
+    properties:
+      records:
+        type: array
+        items:
+          $ref: "#/definitions/ActivityRecord"
+          
+  BillResponse:
+    required:
+      - image_url
+    properties:
+      image_url:
+        type: string
+        
+  HonorsGuestResponse:
+    required:
+      - guests
+    properties:
+      guests:
+        type: array
+        items:
+          $ref: "#/definitions/HonorGuest"
+          
+  AgendaResponse:
+    required:
+      - image_url
+      - detail
+    properties:
+      image_url:
+        type: string
+      detail:
+        type: string
+          
+  CollaboratorsResponse:
+    required:
+      - images
+    properties:
+      images:
+        type: array
+        items:
+          type: string
+          
+            
+  QuestionRequest:
+    required:
+      - content
+    properties:
+      content:
+        type: string
+        
+  CommentRequest:
+    required:
+      - content
+    properties:
+      content:
+        type: string
+        
+  
