@@ -101,12 +101,22 @@ paths:
   #获得某学科专题推荐
   #获得某学科入门热门推荐
   #获得入门的最新推荐
-  /basebooks/{tag}:
+  /symbols:
+    get:
+      tags:
+        - Basebook
+      responses:
+        "200":
+          description: if success, return symbols
+          schema: 
+            $ref: "#/definitions/SymbolsResponse"
+  
+  /basebooks/{symbol}:
     get:
       tags:
         - Basebook
       parameters:
-        - name: tag
+        - name: symbol
           in: path
           required: true
           type: string
@@ -847,6 +857,15 @@ definitions:
       - images
     properties:
       images:
+        type: array
+        items:
+          type: string
+          
+  SymbolsResponse:
+    required:
+      - symbols
+    properties:
+      symbols:
         type: array
         items:
           type: string
