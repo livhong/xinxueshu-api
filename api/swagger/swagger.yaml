@@ -134,6 +134,10 @@ paths:
           in: query
           required: false
           description: hot for 热门推荐, subject for 学科推荐, topic for 专题推荐. default operation is getting a list ordered by time.
+        - name: is_hot
+          in: query
+          required: false
+          type: boolean
       responses:
         "200":
           description: success
@@ -304,11 +308,17 @@ paths:
     get:
       tags:
         - Question
+      parameters:
+        - name: is_hot
+          in: query
+          type: boolean
+          required: false
+          description: whether it is hot question?
       responses:
         "200":
           description: success
           schema:
-            $ref: "#/definitions/OperationResponse"
+            $ref: "#/definitions/QuestionsResponse"
   #首发的提问
   /question:
     post:
@@ -320,11 +330,10 @@ paths:
           type: string
           required: true
           description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
-        - name: question
-          in: body
+        - name: question_content
+          in: query
           required: true
-          schema:
-            $ref: "#/definitions/QuestionRequest"
+          type: string
       responses:
         "200":
           description: success
@@ -338,11 +347,15 @@ paths:
       tags: 
         - Comment
       parameters:
-        - name: comment
-          in: body
+        - name: Cookie
+          in: header
+          type: string
           required: true
-          schema:
-            $ref: "#/definitions/CommentRequest"
+          description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
+        - name: comment
+          in: query
+          required: true
+          type: string
       responses:
         "200":
           description: success
@@ -568,6 +581,7 @@ definitions:
   Firstpub:
     type: object
     required:
+      - firstpub_id
       - title
       - author
       - source
@@ -578,6 +592,8 @@ definitions:
       - content
       - type
     properties:
+      firstpub_id:
+        type: string
       title:
         type: string
       author:
@@ -600,6 +616,7 @@ definitions:
   Activity:
     type: object
     required:
+      - activity_id
       - catena
       - theme
       - activity_time
@@ -615,6 +632,8 @@ definitions:
       - email
       - detail
     properties:
+      activity_id:
+        type: string
       catena:
         type: string
       theme:
@@ -690,8 +709,19 @@ definitions:
       content:
         type: string
     
-  # Question:
-  #   type: object
+  Question:
+    type: object
+    required:
+      - question_id
+      - content
+      - pub_date
+    properties:
+      question_id:
+        type: string
+      content:
+        type: string
+      pub_date:
+        type: string
     
   Comment:
     type: object
@@ -761,6 +791,29 @@ definitions:
       
   FirstpubSummary:
     type: object
+    required:
+      - firstpub_id
+      - title
+      - author
+      - source
+      - pub_date
+      - doi
+      - summary
+    properties:
+      firstpub_id:
+        type: string
+      title:
+        type: string
+      author:
+        type: string
+      source:
+        type: string
+      pub_date:
+        type: string
+      doi:
+        type: string
+      summary:
+        type: string
   
   FirstpubsResponse:
     required:
@@ -773,6 +826,32 @@ definitions:
           
   ActivitySummary:
     type: object
+    required:
+      - activity_id
+      - catena
+      - theme
+      - activity_time
+      - address
+      - state
+      - summary
+      - signup_number
+    properties:
+      activity_id:
+        type: string
+      catena:
+        type: string
+      theme:
+        type: string
+      activity_time:
+        type: string
+      address:
+        type: string
+      state:
+        type: string
+      summary:
+        type: string
+      signup_number:
+        type: number
           
   ActivitiesResponse:
     required:
@@ -782,6 +861,26 @@ definitions:
         type: array
         items: 
           $ref: "#/definitions/ActivitySummary"
+          
+  Symble:
+    type: object
+    required:
+      - tag
+      - name
+    properties:
+      tag:
+        type: string
+      name:
+        type: string
+        
+  QuestionsResponse:
+    required:
+      - questions
+    properties:
+      questions:
+        type: array
+        items:
+          $ref: "#/definitions/Question"
           
   # ActivityResponse:
   #   required:
@@ -868,21 +967,21 @@ definitions:
       symbols:
         type: array
         items:
-          type: string
+          $ref: "#/definitions/Symble"
           
             
-  QuestionRequest:
-    required:
-      - content
-    properties:
-      content:
-        type: string
+  # QuestionRequest:
+  #   required:
+  #     - content
+  #   properties:
+  #     content:
+  #       type: string
         
-  CommentRequest:
-    required:
-      - content
-    properties:
-      content:
-        type: string
+  # CommentRequest:
+  #   required:
+  #     - content
+  #   properties:
+  #     content:
+  #       type: string
         
   
