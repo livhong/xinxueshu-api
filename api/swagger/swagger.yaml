@@ -163,11 +163,6 @@ paths:
           type: number
           in: query
           required: true
-        - name: hot
-          type: boolean
-          in: query
-          required: false
-          description: default value is false
       responses:
         "200":
           description: Success
@@ -190,12 +185,6 @@ paths:
           type: number
           in: query
           required: true
-        - name: hot
-          type: boolean
-          in: query
-          required: false
-          default: false
-          description: check whether getting recommended firstpub, default value is false
       responses:
         "200":
           description: Success
@@ -218,12 +207,6 @@ paths:
           type: number
           in: query
           required: true
-        - name: hot
-          type: boolean
-          in: query
-          required: false
-          default: false
-          description: check whether getting recommended firstpub, default value is false
       responses:
         "200":
           description: Success
