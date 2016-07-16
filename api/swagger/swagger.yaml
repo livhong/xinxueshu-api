@@ -47,6 +47,7 @@ paths:
           schema: 
             $ref: "#/definitions/OperationResponse"
           
+          
   #登出
   /user/logout:
     # parameters:
@@ -302,6 +303,7 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/OperationResponse"
+        
   
   #获得入门页中显示的热门问题
   /questions/list:
