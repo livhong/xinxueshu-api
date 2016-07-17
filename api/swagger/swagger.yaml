@@ -72,7 +72,15 @@ paths:
           type: string
           in: query
           required: true
-        - name: studentId
+        - name: email
+          type: string
+          in: query
+          required: true
+        - name: work_institute
+          type: string
+          in: query
+          required: true
+        - name: phone
           type: string
           in: query
           required: true
@@ -88,7 +96,7 @@ paths:
           schema:
             $ref: "#/definitions/OperationResponse"
         "x-1002":
-          description: dulplicate studentId
+          description: email dulplicate
           schema:
             $ref: "#/definitions/OperationResponse"
         
@@ -108,7 +116,7 @@ paths:
         - Basebook
       responses:
         "200":
-          description: if success, return symbols
+          description: 返回json数组，包含所有的symbol
           schema: 
             $ref: "#/definitions/SymbolsResponse"
   
@@ -121,68 +129,86 @@ paths:
           in: path
           required: true
           type: string
-          description: tag is some specific subject, such as literature for 中国语言文学 and all for all subjects
-        - name: start
-          in: query
-          required: true
-          type: number
-        - name: limit
-          in: query
-          required: true
-          type: number
+          description: symbol指代独一无二的主题，比如“literature”代表“中国语言文学”
         - name: type
           type: string
           in: query
           required: false
-          description: hot for 热门推荐, subject for 学科推荐, topic for 专题推荐. default operation is getting a list ordered by time.
-        - name: is_hot
+          description: hot for "热门推荐"; subject for "学科推荐"; topic for "专题推荐"; 默认为按时间排序
+        - name: start
           in: query
-          required: false
-          type: boolean
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          required: true
+          type: integer
+        
       responses:
         "200":
           description: success
           schema:
             $ref: "#/definitions/BasebooksResponse" 
+  #首发
+  /read/{basebook_id}:
+    post:
+      tags:
+        - Basebook
+      parameters:
+        - name: basebook_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/CommentsResponse"    
+    
     
   #首发
   
   #获得首页最新首发
   #获得首页推荐首发
   #获得猜你喜欢首发推荐列表
-  /firstpubs/all:
+  /firstpubs/summary/all:
     get:
       tags:
         - Firstpub
       parameters:
         - name: start
-          type: number
+          type: integer
           in: query
           required: true
         - name: limit
-          type: number
+          type: integer
           in: query
           required: true
       responses:
         "200":
-          description: Success
+          description: success
           schema:
             $ref: "#/definitions/FirstpubsResponse"
   
   #获得论文首发推荐列表
   #获得论文热门首发推荐列表
   #获得论文最新首发推荐列表
-  /firstpubs/paper:
+  /firstpubs/summary/paper:
     get:
       tags:
         - Firstpub
       parameters:
+        - name: type
+          type: string
+          in: query
+          required: true
+          description: hot for "热门首发"; 默认为最新
         - name: start
-          type: number
+          type: integer
           in: query
           required: true
         - name: limit
-          type: number
+          type: integer
           in: query
           required: true
       responses:
@@ -194,17 +220,22 @@ paths:
   #获得观点首发推荐列表
   #获得观点热门首发推荐列表
   #获得观点最新首发推荐列表
-  /firstpubs/point:
+  /firstpubs/summary/point:
     get:
       tags:
         - Firstpub
       parameters:
+        - name: type
+          type: string
+          in: query
+          required: true
+          description: hot for "热门首发"; 默认为最新
         - name: start
-          type: number
+          type: integer
           in: query
           required: true
         - name: limit
-          type: number
+          type: integer
           in: query
           required: true
       responses:
@@ -212,9 +243,6 @@ paths:
           description: Success
           schema:
             $ref: "#/definitions/FirstpubsResponse"
-  
-    
-    
   #获得首发文章详细内容
   /firstpub/{firstpub_id}:
     get:
@@ -231,8 +259,6 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/Firstpub"
-    
-    
   #获得首发文章作者信息
   /author/firstpub/{firstpub_id}:
     get:
@@ -262,8 +288,7 @@ paths:
         "200":
           description: success
           schema:
-            $ref: "#/definitions/Tag"
-  
+            $ref: "#/definitions/Tags"
   
   
   #收藏首发
@@ -276,7 +301,7 @@ paths:
           in: header
           type: string
           required: true
-          description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
+          description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
         - name: firstpub_id
           type: string
           in: path
@@ -294,11 +319,11 @@ paths:
       tags:
         - Question
       parameters:
-        - name: is_hot
+        - name: type
           in: query
-          type: boolean
-          required: false
-          description: whether it is hot question?
+          type: string
+          required: true
+          description: hot for "热门问题"; 默认为"热门"
       responses:
         "200":
           description: success
@@ -314,8 +339,12 @@ paths:
           in: header
           type: string
           required: true
-          description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
-        - name: question_content
+          description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
+        - name: title
+          in: query
+          required: true
+          type: string
+        - name: content
           in: query
           required: true
           type: string
@@ -324,8 +353,6 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/OperationResponse"
-  
-  
   #评论首发
   /comment:
     post:
@@ -336,7 +363,7 @@ paths:
           in: header
           type: string
           required: true
-          description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
+          description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
         - name: comment
           in: query
           required: true
@@ -347,24 +374,29 @@ paths:
           schema:
             $ref: "#/definitions/OperationResponse"
   #获得首发的评论
-  /comments/firstpubs:
+  /comments/{firstpub_id}:
     get:
       tags:
         - Comment
       parameters:
+        - name: firstpub_id
+          in: path
+          required: true
+          type: integer
         - name: start
           in: query
           required: true
-          type: number
+          type: integer
         - name: limit
           in: query
           required: true
-          type: number
+          type: integer
       responses:
         "200":
           description: success
           schema:
             $ref: "#/definitions/CommentsResponse"
+            
   #获得合作期刊列表
   /journals:
     get:
@@ -384,6 +416,7 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/JournalsResponse"
+        
     
   #活动
   
@@ -554,13 +587,27 @@ definitions:
     required:
       - username
       - password
-      - student_id
+      - email
+      - work_institute
+      - phone
     properties:
       username:
         type: string
       password:
         type: string
-      student_id:
+      email:
+        type: string
+      work_institute:
+        type: string
+      phone:
+        type: string
+  
+  tag:
+    type: object
+    required:
+      - tag
+    properties:
+      tag:
         type: string
     
   Firstpub:
@@ -568,21 +615,31 @@ definitions:
     required:
       - firstpub_id
       - title
-      - author
+      - author_id
+      - author_name
+      - star_count
+      - comment_count
       - source
       - pub_date
       - doi
       - cover_img_url
       - summary
       - content
-      - type
     properties:
       firstpub_id:
         type: string
       title:
         type: string
-      author:
+      author_id:
         type: string
+      author_name:
+        type: string
+      star_count:
+        type: integer
+        description: 收藏数
+      comment_count:
+        type: integer
+        description: 评论数
       source: 
         type: string
       pub_date:
@@ -595,8 +652,7 @@ definitions:
         type: string
       content:
         type: string
-      type: 
-        type: string
+      
     
   Activity:
     type: object
@@ -648,18 +704,20 @@ definitions:
       detail:
         type: string
     
-  Basebook:
+  basebook:
     type: object
     required:
-      - subject
+      - sub_subject_type_id
       - type
       - author
       - pub_date
       - summary
       - title
+      - readcount
+      - cover_image
     properties:
-      subject:
-        type: string
+      sub_subject_type_id:
+        type: integer
       type:
         type: string
       author:
@@ -670,51 +728,60 @@ definitions:
         type: string
       title:
         type: string
+      readcount:
+        type: integer
+      cover_image:
+        type: string
+        description: 封面图的url
     
+  Tags:
+    required:
+      - tags
+    properties:
+      tags:
+        type: array
+        items:
+          $ref: "#/definitions/tag"  
+          
   Author:
     type: object
     required:
       - name
       - portrait
       - position
+      - article_count
     properties:
       name:
         type: string
+        description: 用户头像, url
       portrait:
         type: string
       position:
         type: string
+      article_count:
+        type: integer
     
     
-  Tag:
-    type: object
-    required:
-      - content
-    properties:
-      content:
-        type: string
-    
-  Question:
+  question:
     type: object
     required:
       - question_id
-      - content
+      - title
       - pub_date
     properties:
       question_id:
-        type: string
-      content:
+        type: integer
+      title:
         type: string
       pub_date:
         type: string
     
-  Comment:
+  comment:
     type: object
     required:
       - content
       - username
       - pub_date
-      - firstpub_id
     properties:
       content:
         type: string
@@ -722,19 +789,23 @@ definitions:
         type: string
       pub_date:
         type: string
-      firstpub_id:
-        type: number
     
-  Journal:
+  journal:
     type: object
     required:
-      - image_url
-      - note
+      - cover_image
+      - href
+      - name
     properties:
-      image_url:
+      cover_image:
         type: string
-      note:
+        description: 封面图片, url
+      href:
         type: string
+        description: 点击跳转期刊网站, url
+      name:
+        type: string
+        description: 期刊名字
     
   ActivityRecord:
     type: object
@@ -784,9 +855,12 @@ definitions:
       - pub_date
       - doi
       - summary
+      - star_count
+      - comment_count
+      - cover_image
     properties:
       firstpub_id:
-        type: string
+        type: integer
       title:
         type: string
       author:
@@ -799,6 +873,13 @@ definitions:
         type: string
       summary:
         type: string
+      star_count:
+        type: integer
+      comment_count:
+        type: integer
+      cover_image:
+        type: string
+        description: 封面图片, url
   
   FirstpubsResponse:
     required:
@@ -847,15 +928,15 @@ definitions:
         items: 
           $ref: "#/definitions/ActivitySummary"
           
-  Symble:
+  symbol:
     type: object
     required:
-      - tag
-      - name
+      - symbol
+      - realname
     properties:
-      tag:
+      symbol:
         type: string
-      name:
+      realname:
         type: string
         
   QuestionsResponse:
@@ -865,7 +946,7 @@ definitions:
       questions:
         type: array
         items:
-          $ref: "#/definitions/Question"
+          $ref: "#/definitions/question"
           
   # ActivityResponse:
   #   required:
@@ -881,7 +962,7 @@ definitions:
       basebooks:
         type: array
         items: 
-          $ref: "#/definitions/Basebook"
+          $ref: "#/definitions/basebook"
           
   CommentsResponse:
     required:
@@ -890,7 +971,7 @@ definitions:
       comments:
         type: array
         items:
-          $ref: "#/definitions/Comment"
+          $ref: "#/definitions/comment"
           
   JournalsResponse:
     required:
@@ -899,7 +980,7 @@ definitions:
       journals:
         type: array
         items:
-          $ref: "#/definitions/Journal"
+          $ref: "#/definitions/journal"
           
   RecordsResponse:
     required:
@@ -952,7 +1033,7 @@ definitions:
       symbols:
         type: array
         items:
-          $ref: "#/definitions/Symble"
+          $ref: "#/definitions/symbol"
           
             
   # QuestionRequest:
