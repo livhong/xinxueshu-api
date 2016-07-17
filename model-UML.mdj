@@ -1393,7 +1393,7 @@
 											"containerExtending": false,
 											"left": 1640,
 											"top": 253,
-											"width": 248.16259765625,
+											"width": 262.62255859375,
 											"height": 13,
 											"autoResize": false,
 											"underline": false,
@@ -1431,7 +1431,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 276,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1455,7 +1455,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 291,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1479,7 +1479,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 306,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1503,7 +1503,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 321,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1527,7 +1527,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 336,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1551,7 +1551,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 351,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1575,7 +1575,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 366,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1599,7 +1599,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 381,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1623,7 +1623,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 396,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												},
@@ -1647,7 +1647,7 @@
 													"containerExtending": false,
 													"left": 1645,
 													"top": 411,
-													"width": 238.16259765625,
+													"width": 252.62255859375,
 													"height": 13,
 													"autoResize": false
 												}
@@ -1663,7 +1663,7 @@
 											"containerExtending": false,
 											"left": 1640,
 											"top": 271,
-											"width": 248.16259765625,
+											"width": 262.62255859375,
 											"height": 158,
 											"autoResize": false
 										}
@@ -1679,7 +1679,7 @@
 									"containerExtending": false,
 									"left": 1640,
 									"top": 248,
-									"width": 248.16259765625,
+									"width": 262.62255859375,
 									"height": 196,
 									"autoResize": false,
 									"nameLabel": {
@@ -8407,7 +8407,7 @@
 											"showShadow": true,
 											"containerChangeable": false,
 											"containerExtending": false,
-											"left": 1910,
+											"left": 1918,
 											"top": 339,
 											"width": 0,
 											"height": 13,
@@ -8467,7 +8467,7 @@
 											"showShadow": true,
 											"containerChangeable": false,
 											"containerExtending": false,
-											"left": 1912,
+											"left": 1927,
 											"top": 338,
 											"width": 0,
 											"height": 13,
@@ -8499,7 +8499,7 @@
 										"$ref": "AAAAAAFV869rCwOqGlU="
 									},
 									"lineStyle": 2,
-									"points": "1936:330;1887:330",
+									"points": "1936:330;1902:330",
 									"nameLabel": {
 										"$ref": "AAAAAAFV87HV8QPpdRw="
 									},
@@ -13377,7 +13377,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFV1Os8TeobNmA="
 									},
-									"name": "subsubjecttype_id",
+									"name": "sub_subject_type_id",
 									"length": 0,
 									"primaryKey": false,
 									"foreignKey": false,
@@ -13469,7 +13469,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFV1Os8TeobNmA="
 									},
-									"name": "outer_image",
+									"name": "avatar_image",
 									"type": "Image File",
 									"length": 0,
 									"primaryKey": false,
