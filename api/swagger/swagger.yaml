@@ -625,6 +625,9 @@ definitions:
       - cover_img_url
       - summary
       - content
+      - images
+      - audios
+      - videos
     properties:
       firstpub_id:
         type: string
@@ -652,7 +655,52 @@ definitions:
         type: string
       content:
         type: string
+      images:
+        type: array
+        items:
+          $ref: "#/definitions/FirstpubImage"
+      audios:
+        type: array
+        items:
+          $ref: "#/definitions/FirstpubAudio"
+      videos:
+        type: array
+        items:
+          $ref: "#/definitions/FirstpubVideo"
       
+  FirstpubImage:
+    type: object
+    required:
+      - url
+      - content
+    properties:
+      url:
+        type: string
+      content:
+        type: string
+  
+  FirstpubAudio:
+    type: object
+    required:
+      - url
+      - content
+    properties:
+      url:
+        type: string
+      content:
+        type: string
+        
+  FirstpubVideo:
+    type: object
+    required:
+      - url
+      - content
+    properties:
+      url:
+        type: string
+      content:
+        type: string
+        
     
   Activity:
     type: object
