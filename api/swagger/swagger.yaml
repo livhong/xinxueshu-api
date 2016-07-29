@@ -720,6 +720,9 @@ definitions:
       - phone
       - email
       - detail
+      - speaker
+      - type
+      - no
     properties:
       activity_id:
         type: string
@@ -750,6 +753,12 @@ definitions:
       email:
         type: string
       detail:
+        type: string
+      speaker:
+        type: string
+      type:
+        type: string
+      no:
         type: string
     
   basebook:
@@ -949,6 +958,9 @@ definitions:
       - state
       - summary
       - signup_number
+      - speaker
+      - type
+      - no
     properties:
       activity_id:
         type: string
@@ -966,6 +978,12 @@ definitions:
         type: string
       signup_number:
         type: number
+      speaker:
+        type: string
+      type:
+        type: string
+      no:
+        type: string
           
   ActivitiesResponse:
     required:
