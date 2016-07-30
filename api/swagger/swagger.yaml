@@ -243,6 +243,23 @@ paths:
           description: Success
           schema:
             $ref: "#/definitions/FirstpubsResponse"
+            
+  #获得相似首发推荐列表
+  /firstpubs/similar/{firstpub_id}:
+    get:
+      tags:
+        - Firstpub
+      parameters:
+        - name: firstpub_id
+          type: string
+          in: path
+          required: true
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/SimilarFirstpubsResponse"
+            
   #获得首发文章详细内容
   /firstpub/{firstpub_id}:
     get:
@@ -259,6 +276,7 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/Firstpub"
+            
   #获得首发文章作者信息
   /author/firstpub/{firstpub_id}:
     get:
@@ -576,6 +594,33 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/CollaboratorsResponse"
+            
+  #获得几个页面的slider的首发、入门以及两个广告页面
+  /showpage/homepage:
+    get:
+      tags:
+        - ShowPage
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/HomepageResponse"
+  
+  /showpage/firstpub:
+    get:
+      tags:
+        - ShowPage
+      parameters:
+        - name: type
+          in: query
+          required: true
+          type: string
+          description: paper for 论文首发页, point for 观点首发页
+      responses:
+        200:
+          description: success
+          schema:
+            $ref: "#/definitions/FirstpubPageResponse"
 
   # /swagger:
   #   x-swagger-pipe: swagger_raw
@@ -1101,7 +1146,69 @@ definitions:
         items:
           $ref: "#/definitions/symbol"
           
-            
+          
+  ShowpageFirstpub:
+    type: object
+    required:
+      - firstpub_id
+      - title
+      - cover_img
+      - author_name
+    properties:
+      firstpub_id:
+        type: integer
+      title:
+        type: string
+      cover_img:
+        type: string
+      author_name:
+        type: string
+          
+          
+  HomepageResponse:
+    required:
+      - firstpubs
+      - ads
+    properties:
+      firstpubs:
+        type: array
+        items:
+          $ref: "#/definitions/ShowpageFirstpub"
+      ads:
+        description: 这个数组长度为2
+        type: array
+        items:
+          type: string
+          
+  FirstpubPageResponse:
+    required:
+      - firstpubs
+    properties:
+      firstpubs:
+        type: array
+        items:
+          $ref: "#/definitions/ShowpageFirstpub"
+          
+  SimilarFirstpub:
+    type: object
+    required:
+      - firstpub_id
+      - title
+    properties:
+      firstpub_id:
+        type: integer
+      title:
+        type: string
+          
+  SimilarFirstpubsResponse:
+    required:
+      - firstpubs
+    properties:
+      firstpubs:
+        type: array
+        items:
+          $ref: "#/definitions/SimilarFirstpub"
+  
   # QuestionRequest:
   #   required:
   #     - content
