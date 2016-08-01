@@ -100,27 +100,29 @@ paths:
           schema:
             $ref: "#/definitions/OperationResponse"
         
-  #Mofify
-  #ResetPasswd
-  
-  #入门列表页
+  ##### 入门列表页 #####
 
-  #获得首页最新活动右边入门推荐
-  #获得某学科的学科推荐
-  #获得某学科专题推荐
-  #获得某学科入门热门推荐
-  #获得入门的最新推荐
-  /symbols:
+    # 获得入门页面所有一级类别
+    /subject/get:
     get:
       tags:
         - Basebook
       responses:
         "200":
-          description: 返回json数组，包含所有的symbol
+          description: 返回一个json对象，包含所有subject的数组
           schema: 
-            $ref: "#/definitions/SymbolsResponse"
+            properties:
+                          subjects:
+                            type: array
+                            items:
+                              properties:
+                                symbol:
+                                  type: string
+                                realname:
+                                  type: string
   
-  /basebooks/{symbol}:
+  # 获得某一级类别下的入门书单
+    /basebook/get/symbol/{symbol}:
     get:
       tags:
         - Basebook
@@ -129,12 +131,12 @@ paths:
           in: path
           required: true
           type: string
-          description: symbol指代独一无二的主题，比如“literature”代表“中国语言文学”
+          description: symbol是一级类别的标记，比如“literature”代表“中国语言文学”
         - name: type
           type: string
           in: query
           required: false
-          description: hot for "热门推荐"; subject for "学科推荐"; topic for "专题推荐"; 默认为按时间排序
+          description: hot 请求 "热门推荐"; subject 请求 "学科推荐"; topic 请求 "专题推荐"; new 请求 "最新推荐"; 均按时间倒序排序
         - name: start
           in: query
           required: true
@@ -148,9 +150,139 @@ paths:
         "200":
           description: success
           schema:
-            $ref: "#/definitions/BasebooksResponse" 
-  #首发
-  /read/{basebook_id}:
+            properties:
+              basebooks:
+                type: array
+                items:
+                  properties:
+                    basebook_id:
+                      type: integer
+                    sub_subject_type_id:
+                      type: integer
+                      description: 入门书单的二级类别（暂用于相关推荐）
+                    type:
+                      type: string
+                    author:
+                      type: string
+                    pub_date:
+                      type: string
+                    summary:
+                      type: string
+                    title:
+                      type: string
+                    readcount:
+                      type: integer
+                    banner_image:
+                      type: string
+                    avatar_image:
+                      type: string
+                    cover_image:
+                      type: string
+                      description: 封面图的url
+                    description:
+                      type: string
+                      description: 入门页面slider图片下方的文字描述
+
+  # 查看相关推荐
+  /basebook/related/{basebook_id}:
+    get:
+      tags:
+        - Basebook
+      parameters:
+        - name: basebook_id
+          in: path
+          required: true
+          type: string
+        - name: start
+          in: query
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              basebooks:
+                type: array
+                items:
+                  properties:
+                    basebook_id:
+                      type: integer
+                    sub_subject_type_id:
+                      type: integer
+                      description: 入门书单的二级类别
+                    type:
+                      type: string
+                    author:
+                      type: string
+                    pub_date:
+                      type: string
+                    summary:
+                      type: string
+                    title:
+                      type: string
+                    readcount:
+                      type: integer
+                    banner_image:
+                      type: string
+                    avatar_image:
+                      type: string
+                    cover_image:
+                      type: string
+                      description: 封面图的url
+                    description:
+                      type: string
+                      description: 入门页面slider图片下方的文字描述
+
+  # 查看basebook详情
+  /basebook/find/id/{basebook_id}:
+    get:
+      tags:
+        - Basebook
+      parameters:
+        - name: basebook_id
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              basebook_id:
+                type: integer
+              sub_subject_type_id:
+                type: integer
+                description: 入门书单的二级类别
+              type:
+                type: string
+              author:
+                type: string
+              pub_date:
+                type: string
+              summary:
+                type: string
+              title:
+                type: string
+              readcount:
+                type: integer
+              banner_image:
+                type: string
+              avatar_image:
+                type: string
+              cover_image:
+                type: string
+                description: 封面图的url
+              description:
+                type: string
+                description: 入门页面slider图片下方的文字描述
+
+  # 阅读入门书单（阅读数 + 1）
+  /basebook/read/{basebook_id}:
     post:
       tags:
         - Basebook
@@ -163,9 +295,209 @@ paths:
         "200":
           description: success
           schema:
-            $ref: "#/definitions/CommentsResponse"    
-    
-    
+            properties:
+              message:
+                type: string
+
+  # 加入收藏
+  /basebook/star/{basebook_id}:
+    post:
+      tags:
+        - Basebook
+      parameters:
+        - name: basebook_id
+          in: path
+          required: true
+          type: string
+        - name: user
+          in: header
+          type: string
+          required: true
+          description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              message:
+                type: string
+                description: 若重复收藏会返回错误信息
+
+  # 对某basebook提问
+  /basebook/ask/{basebook_id}:
+    post:
+      tags:
+        - Basebook
+      parameters:
+        - name: basebook_id
+          in: path
+          required: true
+          type: integer
+        - name: title
+          in: query
+          required: true
+          type: string
+        - name: content
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              message:
+                type: string
+
+  # 获取热门问题
+  /question/get/basebook/{symbol}:
+    get:
+      tags:
+        - Basebook
+      parameters:
+        - name: symbol
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              questions:
+                type: array
+                items:
+                  properties:
+                    question_id:
+                      type: integer
+                    title:
+                      type: integer
+                    content:
+                      type: string
+                    pub_date:
+                      type: string
+                    user_id:
+                      type: integer
+                    user_name:
+                      type: string
+                    user_head:
+                      type: string
+
+ ##### 基础设施book相关 #####
+
+ # 阅读书籍（阅读数 + 1）
+  /book/read/{book_id}:
+    post:
+      tags:
+        - Book
+      parameters:
+        - name: book_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              message:
+                type: string
+
+  # 对某book评价
+  /book/review/{book_id}:
+    post:
+      tags:
+        - Book
+      parameters:
+        - name: book_id
+          in: path
+          required: true
+          type: integer
+        - name: content
+          in: query
+          required: true
+          type: string
+        - name: score
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              message:
+                type: string
+                description: 若重复评价会返回错误信息
+
+  # 加入用户书单
+  /book/star/{book_id}:
+    post:
+      tags:
+        - Book
+      parameters:
+        - name: book_id
+          in: path
+          required: true
+          type: string
+        - name: user
+          in: header
+          type: string
+          required: true
+          description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              message:
+                type: string
+                description: 若重复加入书单会返回错误信息
+
+  # 获取某basebook下的book
+  /book/get/basebook/{basebook_id}:
+    get:
+      tags:
+        - Book
+      parameters:
+        - name: basebook_id
+          in: path
+          required: true
+          type: integer
+        - name: start
+          in: query
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              books:
+                type: array
+                items:
+                  properties:
+                    book_id:
+                      type: integer
+                    title:
+                      type: integer
+                    press:
+                      type: string
+                    summary:
+                      type: string
+                    book_image:
+                      type: string
+                    book_file:
+                      type: string
+                    read_count:
+                      type: integer
+                    author:
+                      type: string
+
   #首发
   
   #获得首页最新首发
@@ -331,35 +663,7 @@ paths:
             $ref: "#/definitions/OperationResponse"
         
   
-  #获得入门页中显示的热门问题
-  /questions/list:
-    get:
-      tags:
-        - Question
-      parameters:
-        - name: type
-          in: query
-          type: string
-          required: true
-          description: hot for "热门问题"; 默认为按时间排序
-        - name: classification
-          in: query
-          type: string
-          required: true
-          description: firstpub for "首发"; basebook for "入门";
-        - name: start
-          type: integer
-          in: query
-          required: true
-        - name: limit
-          type: integer
-          in: query
-          required: true
-      responses:
-        "200":
-          description: success
-          schema:
-            $ref: "#/definitions/QuestionsResponse"
+
   #首发的提问
   /question:
     post:
