@@ -44,16 +44,19 @@ paths:
                 type: integer
               message:
                 type: string
-              username:
-                type: string
-              phone:
-                type: string
-              email:
-                type: string
-              work_institue:
-                type: string
-              portrait:
-                type: string
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  phone:
+                    type: string
+                  email:
+                    type: string
+                  work_institue:
+                    type: string
+                  portrait:
+                    type: string
           
   #登出
   /user/logout:
@@ -106,16 +109,19 @@ paths:
                 type: integer
               message:
                 type: string
-              username:
-                type: string
-              phone:
-                type: string
-              email:
-                type: string
-              work_institue:
-                type: string
-              portrait:
-                type: string
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  phone:
+                    type: string
+                  email:
+                    type: string
+                  work_institue:
+                    type: string
+                  portrait:
+                    type: string
   
   /user/current:
     get:
@@ -130,16 +136,19 @@ paths:
                 type: integer
               message:
                 type: string
-              username:
-                type: string
-              phone:
-                type: string
-              email:
-                type: string
-              work_institue:
-                type: string
-              portrait:
-                type: string
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  phone:
+                    type: string
+                  email:
+                    type: string
+                  work_institue:
+                    type: string
+                  portrait:
+                    type: string
         
   ##### 入门页 #####
 
