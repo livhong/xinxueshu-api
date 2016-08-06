@@ -4,9 +4,9 @@ info:
   title: 新学术网
 # during dev, should point to your local machine
 host: localhost:10010
-# basePath prefixes all resource paths 
+# basePath prefixes all resource paths
 basePath: /
-# 
+#
 schemes:
   # tip: remove http to make production-grade
   - http
@@ -18,7 +18,7 @@ produces:
   - application/json
 paths:
   #User
-  
+
     #Login
   /user/login:
     # x-swagger-router-controller: user
@@ -44,10 +44,10 @@ paths:
       responses:
         "200":
           description: login msg
-          schema: 
+          schema:
             $ref: "#/definitions/OperationResponse"
-          
-          
+
+
   #登出
   /user/logout:
     # parameters:
@@ -59,7 +59,7 @@ paths:
           description: logout
           schema:
             $ref: "#/definitions/OperationResponse"
-        
+
   #Register
   /user/register:
     post:
@@ -89,7 +89,7 @@ paths:
       responses:
         "200":
           description: if success, return user
-          schema: 
+          schema:
             $ref: "#/definitions/User"
         "x-1001":
           description: username dulplicate
@@ -99,18 +99,18 @@ paths:
           description: email dulplicate
           schema:
             $ref: "#/definitions/OperationResponse"
-        
+
   ##### 入门列表页 #####
 
-  # 获得入门页面所有一级类别
-  /subject/get:
+    # 获得入门页面所有一级类别
+    /subject/get:
     get:
       tags:
         - Basebook
       responses:
         "200":
           description: 返回一个json对象，包含所有subject的数组
-          schema: 
+          schema:
             properties:
               subjects:
                 type: array
@@ -120,9 +120,9 @@ paths:
                       type: string
                     realname:
                       type: string
-  
+
   # 获得某一级类别下的入门书单
-  /basebook/get/symbol/{symbol}:
+    /basebook/get/symbol/{symbol}:
     get:
       tags:
         - Basebook
@@ -145,7 +145,7 @@ paths:
           in: query
           required: true
           type: integer
-        
+
       responses:
         "200":
           description: success
@@ -499,7 +499,7 @@ paths:
                       type: string
 
   #首发
-  
+
   #获得首页最新首发
   #获得首页推荐首发
   #获得猜你喜欢首发推荐列表
@@ -521,7 +521,7 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/FirstpubsResponse"
-  
+
   #获得论文首发推荐列表
   #获得论文热门首发推荐列表
   #获得论文最新首发推荐列表
@@ -548,7 +548,7 @@ paths:
           description: Success
           schema:
             $ref: "#/definitions/FirstpubsResponse"
-  
+
   #获得观点首发推荐列表
   #获得观点热门首发推荐列表
   #获得观点最新首发推荐列表
@@ -575,7 +575,7 @@ paths:
           description: Success
           schema:
             $ref: "#/definitions/FirstpubsResponse"
-            
+
   #获得相似首发推荐列表
   /firstpubs/similar/{firstpub_id}:
     get:
@@ -591,11 +591,11 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/SimilarFirstpubsResponse"
-            
+
   #获得首发文章详细内容
   /firstpub/{firstpub_id}:
     get:
-      tags: 
+      tags:
         - Firstpub
       parameters:
         - name: firstpub_id
@@ -608,42 +608,7 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/FirstpubResponse"
-            
-  # 获取热门问题
-  /question/get/firstpub/{firstpub_id}:
-    get:
-      tags:
-        - Firstpub
-      parameters:
-        - name: firstpub_id
-          in: path
-          required: true
-          type: string
-      responses:
-        "200":
-          description: success
-          schema:
-            properties:
-              questions:
-                type: array
-                items:
-                  properties:
-                    question_id:
-                      type: integer
-                    title:
-                      type: integer
-                    content:
-                      type: string
-                    pub_date:
-                      type: string
-                    user_id:
-                      type: integer
-                    user_name:
-                      type: string
-                    user_head:
-                      type: string
-                      
-            
+
   #获得首发文章作者信息
   /author/firstpub/{firstpub_id}:
     get:
@@ -674,8 +639,8 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/Tags"
-  
-  
+
+
   #收藏首发
   /star/firstpub/{firstpub_id}:
     post:
@@ -696,66 +661,37 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/OperationResponse"
-        
-  
-  #获得入门页中显示的热门问题
-  # /questions/list:
-  #   get:
-  #     tags:
-  #       - Question
-  #     parameters:
-  #       - name: type
-  #         in: query
-  #         type: string
-  #         required: true
-  #         description: hot for "热门问题"; 默认为按时间排序
-  #       - name: classification
-  #         in: query
-  #         type: string
-  #         required: true
-  #         description: firstpub for "首发"; basebook for "入门";
-  #       - name: start
-  #         type: integer
-  #         in: query
-  #         required: true
-  #       - name: limit
-  #         type: integer
-  #         in: query
-  #         required: true
-  #     responses:
-  #       "200":
-  #         description: success
-  #         schema:
-  #           $ref: "#/definitions/QuestionsResponse"
+
+
 
   #首发的提问
-  # /question:
-  #   post:
-  #     tags:
-  #       - Question
-  #     parameters:
-  #       - name: Cookie
-  #         in: header
-  #         type: string
-  #         required: true
-  #         description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
-  #       - name: title
-  #         in: query
-  #         required: true
-  #         type: string
-  #       - name: content
-  #         in: query
-  #         required: true
-  #         type: string
-  #     responses:
-  #       "200":
-  #         description: success
-  #         schema:
-  #           $ref: "#/definitions/OperationResponse"
+  /question:
+    post:
+      tags:
+        - Question
+      parameters:
+        - name: Cookie
+          in: header
+          type: string
+          required: true
+          description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
+        - name: title
+          in: query
+          required: true
+          type: string
+        - name: content
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/OperationResponse"
   #评论首发
   /comment:
     post:
-      tags: 
+      tags:
         - Comment
       parameters:
         - name: Cookie
@@ -767,10 +703,6 @@ paths:
           in: query
           required: true
           type: string
-        - name: firstpub_id
-          in: query
-          required: true
-          type: integer
       responses:
         "200":
           description: success
@@ -795,27 +727,11 @@ paths:
           required: true
           type: integer
       responses:
-        200:
+        "200":
           description: success
           schema:
-            properties:
-              comments:
-                type: array
-                items:
-                  properties:
-                    comment_id:
-                      type: integer
-                    content:
-                      type: string
-                    pub_date:
-                      type: string
-                    user_id:
-                      type: integer
-                    user_name:
-                      type: string
-                    user_head:
-                      type: string
-            
+            $ref: "#/definitions/CommentsResponse"
+
   #获得合作期刊列表
   /journals:
     get:
@@ -835,10 +751,10 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/JournalsResponse"
-        
-    
+
+
   #活动
-  
+
   #获得首页最新活动列表
   #活动活动页面推荐活动
   #获得新学术活动列表
@@ -866,7 +782,7 @@ paths:
           description: success return
           schema:
             $ref: "#/definitions/ActivitiesResponse"
-  
+
   #获得活动报道列表
   /activity_record/activities:
     get:
@@ -913,10 +829,10 @@ paths:
       responses:
         "200":
           description: success
-          schema: 
+          schema:
             $ref: "#/definitions/OperationResponse"
-  
-  
+
+
   #活动详情页面
   #获得活动的海报
   /activity/bill/{activity_id}:
@@ -933,9 +849,9 @@ paths:
           description: OK
           schema:
             $ref: "#/definitions/BillResponse"
-    
+
   #获得活动介绍
-  
+
   /activity/info/{activity_id}:
     get:
       tags:
@@ -982,7 +898,7 @@ paths:
             $ref: "#/definitions/HonorsGuestResponse"
   #获得活动合作单位及媒体
   /activity/collaborator/{activity_id}:
-    get: 
+    get:
       tags:
         - Activity
       parameters:
@@ -995,7 +911,7 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/CollaboratorsResponse"
-            
+
   #获得几个页面的slider的首发、入门以及两个广告页面
   /showpage/homepage:
     get:
@@ -1006,7 +922,7 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/HomepageResponse"
-  
+
   /showpage/firstpub:
     get:
       tags:
@@ -1028,7 +944,7 @@ paths:
 # complex objects have schema definitions
 definitions:
 
-  User: 
+  User:
     type: object
     required:
       - uid
@@ -1050,7 +966,7 @@ definitions:
         type: string
       phone:
         type: string
-  
+
   tag:
     type: object
     required:
@@ -1058,7 +974,7 @@ definitions:
     properties:
       tag:
         type: string
-    
+
   Firstpub:
     type: object
     required:
@@ -1093,7 +1009,7 @@ definitions:
       comment_count:
         type: integer
         description: 评论数
-      source: 
+      source:
         type: string
       pub_date:
         type: string
@@ -1119,7 +1035,7 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/FirstpubVideo"
-      
+
   FirstpubImage:
     type: object
     required:
@@ -1130,7 +1046,7 @@ definitions:
         type: string
       content:
         type: string
-  
+
   FirstpubAudio:
     type: object
     required:
@@ -1141,7 +1057,7 @@ definitions:
         type: string
       content:
         type: string
-        
+
   FirstpubVideo:
     type: object
     required:
@@ -1152,8 +1068,8 @@ definitions:
         type: string
       content:
         type: string
-        
-    
+
+
   Activity:
     type: object
     required:
@@ -1194,7 +1110,7 @@ definitions:
         type: string
       sponsor:
         type: string
-      language: 
+      language:
         type: string
       target:
         type: string
@@ -1212,37 +1128,37 @@ definitions:
         type: string
       no:
         type: string
-    
-  # basebook:
-  #   type: object
-  #   required:
-  #     - sub_subject_type_id
-  #     - type
-  #     - author
-  #     - pub_date
-  #     - summary
-  #     - title
-  #     - readcount
-  #     - cover_image
-  #   properties:
-  #     sub_subject_type_id:
-  #       type: integer
-  #     type:
-  #       type: string
-  #     author:
-  #       type: string
-  #     pub_date:
-  #       type: string
-  #     summary:
-  #       type: string
-  #     title:
-  #       type: string
-  #     readcount:
-  #       type: integer
-  #     cover_image:
-  #       type: string
-  #       description: 封面图的url
-    
+
+  basebook:
+    type: object
+    required:
+      - sub_subject_type_id
+      - type
+      - author
+      - pub_date
+      - summary
+      - title
+      - readcount
+      - cover_image
+    properties:
+      sub_subject_type_id:
+        type: integer
+      type:
+        type: string
+      author:
+        type: string
+      pub_date:
+        type: string
+      summary:
+        type: string
+      title:
+        type: string
+      readcount:
+        type: integer
+      cover_image:
+        type: string
+        description: 封面图的url
+
   Tags:
     required:
       - tags
@@ -1250,8 +1166,8 @@ definitions:
       tags:
         type: array
         items:
-          $ref: "#/definitions/tag"  
-          
+          $ref: "#/definitions/tag"
+
   Author:
     type: object
     required:
@@ -1269,36 +1185,36 @@ definitions:
         type: string
       article_count:
         type: integer
-    
-    
-  # Question:
-  #   type: object
-  #   required:
-  #     - question_id
-  #     - title
-  #     - pub_date
-  #   properties:
-  #     question_id:
-  #       type: integer
-  #     title:
-  #       type: string
-  #     pub_date:
-  #       type: string
-    
-  # comment:
-  #   type: object
-  #   required:
-  #     - content
-  #     - username
-  #     - pub_date
-  #   properties:
-  #     content:
-  #       type: string
-  #     username:
-  #       type: string
-  #     pub_date:
-  #       type: string
-    
+
+
+  Question:
+    type: object
+    required:
+      - question_id
+      - title
+      - pub_date
+    properties:
+      question_id:
+        type: integer
+      title:
+        type: string
+      pub_date:
+        type: string
+
+  comment:
+    type: object
+    required:
+      - content
+      - username
+      - pub_date
+    properties:
+      content:
+        type: string
+      username:
+        type: string
+      pub_date:
+        type: string
+
   journal:
     type: object
     required:
@@ -1315,11 +1231,11 @@ definitions:
       name:
         type: string
         description: 期刊名字
-    
+
   ActivityRecord:
     type: object
-    
-    
+
+
   HonorGuest:
     type: object
     required:
@@ -1333,8 +1249,8 @@ definitions:
         type: string
       guest_url:
         type: string
-    
-    
+
+
   #request
   # LoginRequest:
   #   required:
@@ -1345,15 +1261,15 @@ definitions:
   #       type: string
   #     password:
   #       type: string
-    
-    
+
+
   OperationResponse:
     required:
       - message
     properties:
       message:
         type: string
-      
+
   FirstpubSummary:
     type: object
     required:
@@ -1389,16 +1305,16 @@ definitions:
       cover_image:
         type: string
         description: 封面图片, url
-  
+
   FirstpubsResponse:
     required:
       - firstpubs
     properties:
       firstpubs:
         type: array
-        items: 
+        items:
           $ref: "#/definitions/FirstpubSummary"
-          
+
   ActivitySummary:
     type: object
     required:
@@ -1436,82 +1352,82 @@ definitions:
         type: string
       no:
         type: string
-          
+
   ActivitiesResponse:
     required:
       - activities
     properties:
       activities:
         type: array
-        items: 
+        items:
           $ref: "#/definitions/ActivitySummary"
-          
-  # symbol:
-  #   type: object
-  #   required:
-  #     - symbol
-  #     - realname
-  #   properties:
-  #     symbol:
-  #       type: string
-  #     realname:
-  #       type: string
-        
-        
-  # QuestionListItem:
-  #   type: object
-  #   required:
-  #     - question_id
-  #     - title
-  #     - pub_date
-  #     - uid
-  #     - username
-  #   properties:
-  #     question_id:
-  #       type: integer
-  #     title:
-  #       type: string
-  #     pub_date:
-  #       type: string
-  #     uid:
-  #       type: integer
-  #     username:
-  #       type: string
-        
-  # QuestionsResponse:
-  #   required:
-  #     - questions
-  #   properties:
-  #     questions:
-  #       type: array
-  #       items:
-  #         $ref: "#/definitions/QuestionListItem"
-          
+
+  symbol:
+    type: object
+    required:
+      - symbol
+      - realname
+    properties:
+      symbol:
+        type: string
+      realname:
+        type: string
+
+
+  QuestionListItem:
+    type: object
+    required:
+      - question_id
+      - title
+      - pub_date
+      - uid
+      - username
+    properties:
+      question_id:
+        type: integer
+      title:
+        type: string
+      pub_date:
+        type: string
+      uid:
+        type: integer
+      username:
+        type: string
+
+  QuestionsResponse:
+    required:
+      - questions
+    properties:
+      questions:
+        type: array
+        items:
+          $ref: "#/definitions/QuestionListItem"
+
   # ActivityResponse:
   #   required:
   #     - title
   #   properties:
   #     title:
   #       type: string
-          
-  # BasebooksResponse:
-  #   required:
-  #     - basebooks
-  #   properties:
-  #     basebooks:
-  #       type: array
-  #       items: 
-  #         $ref: "#/definitions/basebook"
-          
-  # CommentsResponse:
-  #   required:
-  #     - comments
-  #   properties:
-  #     comments:
-  #       type: array
-  #       items:
-  #         $ref: "#/definitions/comment"
-          
+
+  BasebooksResponse:
+    required:
+      - basebooks
+    properties:
+      basebooks:
+        type: array
+        items:
+          $ref: "#/definitions/basebook"
+
+  CommentsResponse:
+    required:
+      - comments
+    properties:
+      comments:
+        type: array
+        items:
+          $ref: "#/definitions/comment"
+
   JournalsResponse:
     required:
       - journals
@@ -1520,7 +1436,7 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/journal"
-          
+
   RecordsResponse:
     required:
       - records
@@ -1529,14 +1445,14 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/ActivityRecord"
-          
+
   BillResponse:
     required:
       - image_url
     properties:
       image_url:
         type: string
-        
+
   HonorsGuestResponse:
     required:
       - guests
@@ -1545,7 +1461,7 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/HonorGuest"
-          
+
   AgendaResponse:
     required:
       - image_url
@@ -1555,7 +1471,7 @@ definitions:
         type: string
       detail:
         type: string
-          
+
   CollaboratorsResponse:
     required:
       - images
@@ -1564,17 +1480,17 @@ definitions:
         type: array
         items:
           type: string
-          
-  # SymbolsResponse:
-  #   required:
-  #     - symbols
-  #   properties:
-  #     symbols:
-  #       type: array
-  #       items:
-  #         $ref: "#/definitions/symbol"
-          
-          
+
+  SymbolsResponse:
+    required:
+      - symbols
+    properties:
+      symbols:
+        type: array
+        items:
+          $ref: "#/definitions/symbol"
+
+
   ShowpageFirstpub:
     type: object
     required:
@@ -1591,8 +1507,8 @@ definitions:
         type: string
       author_name:
         type: string
-          
-          
+
+
   HomepageResponse:
     required:
       - firstpubs
@@ -1607,7 +1523,7 @@ definitions:
         type: array
         items:
           type: string
-          
+
   FirstpubPageResponse:
     required:
       - firstpubs
@@ -1616,7 +1532,7 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/ShowpageFirstpub"
-          
+
   SimilarFirstpub:
     type: object
     required:
@@ -1627,7 +1543,7 @@ definitions:
         type: integer
       title:
         type: string
-          
+
   SimilarFirstpubsResponse:
     required:
       - firstpubs
@@ -1636,7 +1552,7 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/SimilarFirstpub"
-  
+
   FirstpubResponse:
     required:
       - firstpub
@@ -1648,20 +1564,18 @@ definitions:
         type: array
         items:
           type: string
-          
-  
+
+
   # QuestionRequest:
   #   required:
   #     - content
   #   properties:
   #     content:
   #       type: string
-        
+
   # CommentRequest:
   #   required:
   #     - content
   #   properties:
   #     content:
   #       type: string
-        
-  
