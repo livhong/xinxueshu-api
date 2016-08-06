@@ -21,7 +21,6 @@ paths:
   
     #Login
   /user/login:
-    # x-swagger-router-controller: user
     post:
       parameters:
         - name: username
@@ -34,19 +33,27 @@ paths:
           in: query
           description: Login password
           type: string
-        # - name: login_obj
-        #   in: body
-        #   description: login object
-        #   schema:
-        #     $ref: "#/definitions/LoginRequest"
       tags:
         - User
       responses:
         "200":
-          description: login msg
+          description: 返回当前登录用户的信息, 若不成功则status值不为0, message里包含错误信息
           schema: 
-            $ref: "#/definitions/OperationResponse"
-          
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              username:
+                type: string
+              phone:
+                type: string
+              email:
+                type: string
+              work_institue:
+                type: string
+              portrait:
+                type: string
           
   #登出
   /user/logout:
@@ -58,7 +65,11 @@ paths:
         default:
           description: logout
           schema:
-            $ref: "#/definitions/OperationResponse"
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
         
   #Register
   /user/register:
@@ -88,19 +99,49 @@ paths:
         - User
       responses:
         "200":
-          description: if success, return user
+          description: 返回当前注册用户的信息, 若不成功则status值不为0, message里包含错误信息
           schema: 
-            $ref: "#/definitions/User"
-        "x-1001":
-          description: username dulplicate
-          schema:
-            $ref: "#/definitions/OperationResponse"
-        "x-1002":
-          description: email dulplicate
-          schema:
-            $ref: "#/definitions/OperationResponse"
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              username:
+                type: string
+              phone:
+                type: string
+              email:
+                type: string
+              work_institue:
+                type: string
+              portrait:
+                type: string
+  
+  /user/current:
+    get:
+      tags:
+        - User
+      responses:
+        "200":
+          description: 返回当前登录用户的信息, 若不成功则status值不为0, message里包含错误信息
+          schema: 
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              username:
+                type: string
+              phone:
+                type: string
+              email:
+                type: string
+              work_institue:
+                type: string
+              portrait:
+                type: string
         
-  ##### 入门列表页 #####
+  ##### 入门页 #####
 
   # 获得入门页面所有一级类别
   /subject/get:
@@ -280,6 +321,9 @@ paths:
               description:
                 type: string
                 description: 入门页面slider图片下方的文字描述
+              introduction:
+                type: string
+                description: 入门详情书单序言
 
   # 阅读入门书单（阅读数 + 1）
   /basebook/read/{basebook_id}:
@@ -491,12 +535,281 @@ paths:
                       type: string
                     book_image:
                       type: string
-                    book_file:
+                    book_url:
                       type: string
+                      description: 阅读链接
+                    buy_url:
+                      type: string
+                      description: 购买链接
                     read_count:
                       type: integer
                     author:
                       type: string
+
+  ##### 活动页 #####
+  
+  # 获取活动列表页数据
+  /activity/get/type/{activity_type}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: activity_type
+          in: path
+          required: true
+          type: string
+          description: top(活动列表页顶部sliders); science(新学术活动); external(外部活动); review(活动报道)
+        - name: start
+          in: query
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              activities:
+                type: array
+                items:
+                  properties:
+                    activity_id:
+                      type: integer
+                    activity_time:
+                      type: string
+                    address:
+                      type: string
+                    catena:
+                      type: string
+                    theme:
+                      type: string
+                    no:
+                      type: integer
+                    speaker:
+                      type: string
+                    online_url:
+                      type: string
+                      description: 如果不是直播, 则不会有该属性
+                    summary:
+                      type: string
+                    bill_image:
+                      type: string
+                      description: 顶部slider封面图片url, 特有属性
+                    avator_image:
+                      type: string
+                      description: 列表中每一项的封面图片url
+                    title:
+                      type: string
+                      description: 活动报道标题, 特有属性
+                    apply_count:
+                      type: string
+                      description: 报名人数
+  
+  # 根据id获取某活动详情
+  /activity/find/id/{activity_id}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: activity_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              activity_id:
+                type: integer
+              activity_time:
+                type: string
+              address:
+                type: string
+              catena:
+                type: string
+              theme:
+                type: string
+              no:
+                type: integer
+              sponsor:
+                type: string  
+                description: 主办单位
+              speaker:
+                type: string
+              language:
+                type: string
+                description: 语言
+              target:
+                type: string
+                description: 对象
+              linkman:
+                type: string
+                description: 联系人
+              email:
+                type: string
+                description: 邮箱
+              phone:
+                type: string
+                description: 电话
+              detail:
+                type: string
+                description: 详细信息
+              bill_image:
+                type: string
+                description: 顶部图标url
+              collaborators:
+                type: array
+                items:
+                  properties:
+                    collaborator_image:
+                      type: string
+                    collaborator_name:
+                      type: string
+              honor_guests:
+                type: array
+                items:
+                  properties:
+                    guest_name:
+                      type: string
+                    guest_image:
+                      type: string
+                    description:
+                      type: string
+              agenda:
+                type: object
+                properties:
+                  agenda_image:
+                    type: string
+                  detail:
+                    type: string
+  
+  # 根据catena和第几期获取某活动详情
+  /activity/find/catena/{catena}/{no}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: catena
+          in: path
+          required: true
+          type: string
+        - name: no
+          in: path
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              activity_id:
+                type: integer
+              activity_time:
+                type: string
+              address:
+                type: string
+              catena:
+                type: string
+              theme:
+                type: string
+              no:
+                type: integer
+              sponsor:
+                type: string  
+                description: 主办单位
+              speaker:
+                type: string
+              language:
+                type: string
+                description: 语言
+              target:
+                type: string
+                description: 对象
+              linkman:
+                type: string
+                description: 联系人
+              email:
+                type: string
+                description: 邮箱
+              phone:
+                type: string
+                description: 电话
+              detail:
+                type: string
+                description: 详细信息
+              bill_image:
+                type: string
+                description: 顶部图标url
+              collaborators:
+                type: array
+                items:
+                  properties:
+                    collaborator_image:
+                      type: string
+                    collaborator_name:
+                      type: string
+              honor_guests:
+                type: array
+                items:
+                  properties:
+                    guest_name:
+                      type: string
+                    guest_image:
+                      type: string
+                    description:
+                      type: string
+              agenda:
+                type: object
+                properties:
+                  agenda_image:
+                    type: string
+                  detail:
+                    type: string
+  
+  # 活动报名
+  /activity/apply/id/{activity_id}:
+    post:
+      tags:
+        - Activity
+      parameters:
+        - name: activity_id
+          in: path
+          required: true
+          type: integer
+        - name: user
+          in: header
+          type: string
+          required: true
+          description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
+        - name: username
+          in: query
+          required: true
+          type: string
+        - name: institute
+          in: query
+          required: true
+          type: string
+        - name: email
+          in: query
+          required: true
+          type: string
+        - name: phone
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              message:
+                type: string
+                description: 若重复报名会返回错误信息
+              
 
   #首发
   
@@ -659,6 +972,22 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/Author"
+            
+  /author/find/id/{author_id}:
+    get:
+      tags:
+        - Author
+      parameters:
+        - name: author_id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/Author"
+            
   #获得首发文章标签列表
   /tags/firstppub/{firstpub_id}:
     get:
@@ -697,61 +1026,6 @@ paths:
           schema:
             $ref: "#/definitions/OperationResponse"
         
-  
-  #获得入门页中显示的热门问题
-  # /questions/list:
-  #   get:
-  #     tags:
-  #       - Question
-  #     parameters:
-  #       - name: type
-  #         in: query
-  #         type: string
-  #         required: true
-  #         description: hot for "热门问题"; 默认为按时间排序
-  #       - name: classification
-  #         in: query
-  #         type: string
-  #         required: true
-  #         description: firstpub for "首发"; basebook for "入门";
-  #       - name: start
-  #         type: integer
-  #         in: query
-  #         required: true
-  #       - name: limit
-  #         type: integer
-  #         in: query
-  #         required: true
-  #     responses:
-  #       "200":
-  #         description: success
-  #         schema:
-  #           $ref: "#/definitions/QuestionsResponse"
-
-  #首发的提问
-  # /question:
-  #   post:
-  #     tags:
-  #       - Question
-  #     parameters:
-  #       - name: Cookie
-  #         in: header
-  #         type: string
-  #         required: true
-  #         description: 用户登录后, 后台会自动从cookie或session中获取用户信息, 不需要手动添加至请求
-  #       - name: title
-  #         in: query
-  #         required: true
-  #         type: string
-  #       - name: content
-  #         in: query
-  #         required: true
-  #         type: string
-  #     responses:
-  #       "200":
-  #         description: success
-  #         schema:
-  #           $ref: "#/definitions/OperationResponse"
   #评论首发
   /comment:
     post:
@@ -817,7 +1091,7 @@ paths:
                       type: string
             
   #获得合作期刊列表
-  /journals:
+  /journal/get:
     get:
       tags:
         - Journal
@@ -835,166 +1109,6 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/JournalsResponse"
-        
-    
-  #活动
-  
-  #获得首页最新活动列表
-  #活动活动页面推荐活动
-  #获得新学术活动列表
-  #获得外部活动
-  /activities/{tag}:
-    get:
-      tags:
-        - Activity
-      parameters:
-        - name: start
-          in: query
-          type: number
-          required: true
-        - name: limit
-          in: query
-          type: number
-          required: true
-        - name: tag
-          in: path
-          type: string
-          required: true
-          description: values are 'all', 'new_science', 'external'
-      responses:
-        "200":
-          description: success return
-          schema:
-            $ref: "#/definitions/ActivitiesResponse"
-  
-  #获得活动报道列表
-  /activity_record/activities:
-    get:
-      tags:
-        - ActivityRecord
-      parameters:
-        - name: start
-          in: query
-          type: number
-          required: true
-        - name: limit
-          in: query
-          type: number
-          required: true
-      responses:
-        "200":
-          description: success return
-          schema:
-            $ref: "#/definitions/RecordsResponse"
-  #活动报名
-  /activity/signup:
-    post:
-      tags:
-        - Activity
-      parameters:
-        - name: Cookie
-          in: header
-          type: string
-          required: true
-          description: After login, you will automatically have the cookie and do not need to add it to http header manually. The only way you get this value is login.
-        - name: username
-          in: query
-          required: true
-          type: string
-        - name: student_id
-          in: query
-          required: true
-          type: string
-        - name: institute
-          in: query
-          required: true
-          type: string
-          description: such as Software Engineering
-      responses:
-        "200":
-          description: success
-          schema: 
-            $ref: "#/definitions/OperationResponse"
-  
-  
-  #活动详情页面
-  #获得活动的海报
-  /activity/bill/{activity_id}:
-    get:
-      tags:
-        - Activity
-      parameters:
-        - name: activity_id
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: OK
-          schema:
-            $ref: "#/definitions/BillResponse"
-    
-  #获得活动介绍
-  
-  /activity/info/{activity_id}:
-    get:
-      tags:
-        - Activity
-      parameters:
-        - name: activity_id
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: success
-          schema:
-            $ref: "#/definitions/Activity"
-  #获得活动嘉宾
-  /activity/honorguest/{activity_id}:
-    get:
-      tags:
-        - Activity
-      parameters:
-        - name: activity_id
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: success
-          schema:
-            $ref: "#/definitions/AgendaResponse"
-  #获得活动议程
-  /activity/agenda/{activity_id}:
-    get:
-      tags:
-        - Activity
-      parameters:
-        - name: activity_id
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: success
-          schema:
-            $ref: "#/definitions/HonorsGuestResponse"
-  #获得活动合作单位及媒体
-  /activity/collaborator/{activity_id}:
-    get: 
-      tags:
-        - Activity
-      parameters:
-        - name: activity_id
-          in: path
-          required: true
-          type: string
-      responses:
-        200:
-          description: success
-          schema:
-            $ref: "#/definitions/CollaboratorsResponse"
             
   #获得几个页面的slider的首发、入门以及两个广告页面
   /showpage/homepage:
