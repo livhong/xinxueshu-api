@@ -100,10 +100,7 @@ paths:
           schema:
             $ref: "#/definitions/OperationResponse"
         
-  #Mofify
-  #ResetPasswd
-  
-  #入门列表页
+  ##### 入门列表页 #####
 
   # 获得入门页面所有一级类别
   /subject/get:
@@ -730,6 +727,7 @@ paths:
   #         description: success
   #         schema:
   #           $ref: "#/definitions/QuestionsResponse"
+
   #首发的提问
   # /question:
   #   post:
