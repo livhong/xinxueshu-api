@@ -1736,6 +1736,7 @@ definitions:
     required:
       - firstpubs
       - ads
+      - activites
     properties:
       firstpubs:
         type: array
@@ -1746,6 +1747,33 @@ definitions:
         type: array
         items:
           type: string
+      activites:
+        type: array
+        items:
+          properties:
+            activity_id:
+              type: integer
+            cover_img:
+              type: string
+            catena:
+              type: string
+            theme:
+              type: string
+            activity_time:
+              type: string
+            address:
+              type: string
+            state:
+              type: string
+            summary:
+              type: string
+            speaker:
+              type: string
+            type:
+              type: string
+            no:
+              type: string
+            
           
   FirstpubPageResponse:
     required:
