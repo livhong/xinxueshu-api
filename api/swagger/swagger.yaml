@@ -1034,6 +1034,22 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/OperationResponse"
+            
+  #首发阅读量
+  /readcount/firstpub/{firstpub_id}:
+    post:
+      tags:
+        - Firstpub
+      parameters:
+        - name: firstpub_id
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/OperationResponse"
         
   #评论首发
   /comment:
