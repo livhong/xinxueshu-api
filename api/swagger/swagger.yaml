@@ -412,6 +412,14 @@ paths:
           in: path
           required: true
           type: string
+        - name: start
+          in: query
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          required: true
+          type: integer
       responses:
         "200":
           description: success
@@ -435,6 +443,55 @@ paths:
                       type: string
                     user_head:
                       type: string
+                      
+  /basebook/get/search/{keyword}:
+    get:
+      tags:
+        - Basebook
+      parameters:
+        - name: keyword
+          in: path
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              basebooks:
+                type: array
+                items:
+                  properties:
+                    basebook_id:
+                      type: integer
+                    sub_subject_type_id:
+                      type: integer
+                      description: 入门书单的二级类别
+                    type:
+                      type: string
+                    author:
+                      type: string
+                    pub_date:
+                      type: string
+                    summary:
+                      type: string
+                    title:
+                      type: string
+                    readcount:
+                      type: integer
+                    banner_image:
+                      type: string
+                    avatar_image:
+                      type: string
+                    cover_image:
+                      type: string
+                      description: 封面图的url
+                    description:
+                      type: string
+                      description: 入门页面slider图片下方的文字描述
+                    introduction:
+                      type: string
+                      description: 入门详情书单序言
 
  ##### 基础设施book相关 #####
 
@@ -587,7 +644,9 @@ paths:
                   properties:
                     activity_id:
                       type: integer
-                    activity_time:
+                    start_time:
+                      type: string
+                    end_time:
                       type: string
                     address:
                       type: string
@@ -634,7 +693,9 @@ paths:
             properties:
               activity_id:
                 type: integer
-              activity_time:
+              start_time:
+                type: string
+              end_time:
                 type: string
               address:
                 type: string
@@ -696,6 +757,102 @@ paths:
                   detail:
                     type: string
   
+  # 根据id获取某活动报道详情
+  /activity/find/review/id/{activity_id}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: activity_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              activity_id:
+                type: integer
+              title:
+                type: string
+              content:
+                type: string
+              avator_image:
+                type: string
+              start_time:
+                type: string
+              end_time:
+                type: string
+              address:
+                type: string
+              catena:
+                type: string
+              theme:
+                type: string
+              no:
+                type: integer
+              sponsor:
+                type: string  
+                description: 主办单位
+              speaker:
+                type: string
+              language:
+                type: string
+                description: 语言
+              target:
+                type: string
+                description: 对象
+              linkman:
+                type: string
+                description: 联系人
+              email:
+                type: string
+                description: 邮箱
+              phone:
+                type: string
+                description: 电话
+              detail:
+                type: string
+                description: 详细信息
+              bill_image:
+                type: string
+                description: 顶部图标url
+              images:
+                type: array
+                items:
+                  properties:
+                    image:
+                      type: string
+                    description:
+                      type: string
+              collaborators:
+                type: array
+                items:
+                  properties:
+                    collaborator_image:
+                      type: string
+                    collaborator_name:
+                      type: string
+              honor_guests:
+                type: array
+                items:
+                  properties:
+                    guest_name:
+                      type: string
+                    guest_image:
+                      type: string
+                    description:
+                      type: string
+              agenda:
+                type: object
+                properties:
+                  agenda_image:
+                    type: string
+                  detail:
+                    type: string
+  
+  
   # 根据catena和第几期获取某活动详情
   /activity/find/catena/{catena}/{no}:
     get:
@@ -717,7 +874,9 @@ paths:
             properties:
               activity_id:
                 type: integer
-              activity_time:
+              start_time:
+                type: string
+              end_time:
                 type: string
               address:
                 type: string
@@ -819,6 +978,65 @@ paths:
                 type: string
                 description: 若重复报名会返回错误信息
               
+  /activity/get/search/{keyword}:
+    get:
+      tags:
+        - Activity
+      parameters:
+        - name: keyword
+          in: path
+          required: true
+          type: string
+        - name: start
+          in: query
+          required: true
+          type: integer
+        - name: limit
+          in: query
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              activities:
+                type: array
+                items:
+                  properties:
+                    activity_id:
+                      type: integer
+                    start_time:
+                      type: string
+                    end_time:
+                      type: string
+                    address:
+                      type: string
+                    catena:
+                      type: string
+                    theme:
+                      type: string
+                    no:
+                      type: integer
+                    speaker:
+                      type: string
+                    online_url:
+                      type: string
+                      description: 如果不是直播, 则不会有该属性
+                    summary:
+                      type: string
+                    bill_image:
+                      type: string
+                      description: 顶部slider封面图片url, 特有属性
+                    avator_image:
+                      type: string
+                      description: 列表中每一项的封面图片url
+                    title:
+                      type: string
+                      description: 活动报道标题, 特有属性
+                    apply_count:
+                      type: string
+                      description: 报名人数
 
   #首发
   
@@ -914,6 +1132,30 @@ paths:
           schema:
             $ref: "#/definitions/SimilarFirstpubsResponse"
             
+            
+  /firstpubs/search/{keyword}:
+    get:
+      tags:
+        - Firstpub
+      parameters:
+        - name: keyword
+          type: string
+          in: path
+          required: true
+        - name: start
+          type: integer
+          in: query
+          required: true
+        - name: limit
+          type: integer
+          in: query
+          required: true
+      responses:
+        "200":
+          description: success
+          schema:
+            $ref: "#/definitions/FirstpubsResponse"
+            
   #获得首发文章详细内容
   /firstpub/{firstpub_id}:
     get:
@@ -930,6 +1172,32 @@ paths:
           description: success
           schema:
             $ref: "#/definitions/FirstpubResponse"
+            
+  # 对某basebook提问
+  /firstpub/ask/{firstpub_id}:
+    post:
+      tags:
+        - Firstpub
+      parameters:
+        - name: firstpub_id
+          in: path
+          required: true
+          type: integer
+        - name: title
+          in: query
+          required: true
+          type: string
+        - name: content
+          in: query
+          required: true
+          type: string
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              message:
+                type: string
             
   # 获取热门问题
   /question/get/firstpub/{firstpub_id}:
@@ -1074,7 +1342,24 @@ paths:
         "200":
           description: success
           schema:
-            $ref: "#/definitions/OperationResponse"
+            properties:
+              comments:
+                type: array
+                items:
+                  properties:
+                    comment_id:
+                      type: integer
+                    content:
+                      type: string
+                    pub_date:
+                      type: string
+                    user_id:
+                      type: integer
+                    user_name:
+                      type: string
+                    user_head:
+                      type: string
+                      
   #获得首发的评论
   /comments/{firstpub_id}:
     get:
@@ -1167,28 +1452,28 @@ paths:
 # complex objects have schema definitions
 definitions:
 
-  User: 
-    type: object
-    required:
-      - uid
-      - username
-      - password
-      - email
-      - work_institute
-      - phone
-    properties:
-      uid:
-        type: integer
-      username:
-        type: string
-      password:
-        type: string
-      email:
-        type: string
-      work_institute:
-        type: string
-      phone:
-        type: string
+  # User: 
+  #   type: object
+  #   required:
+  #     - uid
+  #     - username
+  #     - password
+  #     - email
+  #     - work_institute
+  #     - phone
+  #   properties:
+  #     uid:
+  #       type: integer
+  #     username:
+  #       type: string
+  #     password:
+  #       type: string
+  #     email:
+  #       type: string
+  #     work_institute:
+  #       type: string
+  #     phone:
+  #       type: string
   
   tag:
     type: object
@@ -1293,64 +1578,64 @@ definitions:
         type: string
         
     
-  Activity:
-    type: object
-    required:
-      - activity_id
-      - catena
-      - theme
-      - activity_time
-      - address
-      - bill_image_url
-      - summary
-      - state
-      - sponsor
-      - language
-      - target
-      - linkman
-      - phone
-      - email
-      - detail
-      - speaker
-      - type
-      - no
-    properties:
-      activity_id:
-        type: string
-      catena:
-        type: string
-      theme:
-        type: string
-      activity_time:
-        type: string
-      address:
-        type: string
-      bill_image_url:
-        type: string
-      summary:
-        type: string
-      state:
-        type: string
-      sponsor:
-        type: string
-      language: 
-        type: string
-      target:
-        type: string
-      linkman:
-        type: string
-      phone:
-        type: string
-      email:
-        type: string
-      detail:
-        type: string
-      speaker:
-        type: string
-      type:
-        type: string
-      no:
-        type: string
+  # Activity:
+  #   type: object
+  #   required:
+  #     - activity_id
+  #     - catena
+  #     - theme
+  #     - activity_time
+  #     - address
+  #     - bill_image_url
+  #     - summary
+  #     - state
+  #     - sponsor
+  #     - language
+  #     - target
+  #     - linkman
+  #     - phone
+  #     - email
+  #     - detail
+  #     - speaker
+  #     - type
+  #     - no
+  #   properties:
+  #     activity_id:
+  #       type: string
+  #     catena:
+  #       type: string
+  #     theme:
+  #       type: string
+  #     activity_time:
+  #       type: string
+  #     address:
+  #       type: string
+  #     bill_image_url:
+  #       type: string
+  #     summary:
+  #       type: string
+  #     state:
+  #       type: string
+  #     sponsor:
+  #       type: string
+  #     language: 
+  #       type: string
+  #     target:
+  #       type: string
+  #     linkman:
+  #       type: string
+  #     phone:
+  #       type: string
+  #     email:
+  #       type: string
+  #     detail:
+  #       type: string
+  #     speaker:
+  #       type: string
+  #     type:
+  #       type: string
+  #     no:
+  #       type: string
     
   # basebook:
   #   type: object
@@ -1455,23 +1740,23 @@ definitions:
         type: string
         description: 期刊名字
     
-  ActivityRecord:
-    type: object
+  # ActivityRecord:
+  #   type: object
     
     
-  HonorGuest:
-    type: object
-    required:
-      - name
-      - description
-      - guest_url
-    properties:
-      name:
-        type: string
-      description:
-        type: string
-      guest_url:
-        type: string
+  # HonorGuest:
+  #   type: object
+  #   required:
+  #     - name
+  #     - description
+  #     - guest_url
+  #   properties:
+  #     name:
+  #       type: string
+  #     description:
+  #       type: string
+  #     guest_url:
+  #       type: string
     
     
   #request
@@ -1538,52 +1823,52 @@ definitions:
         items: 
           $ref: "#/definitions/FirstpubSummary"
           
-  ActivitySummary:
-    type: object
-    required:
-      - activity_id
-      - catena
-      - theme
-      - activity_time
-      - address
-      - state
-      - summary
-      - signup_number
-      - speaker
-      - type
-      - no
-    properties:
-      activity_id:
-        type: string
-      catena:
-        type: string
-      theme:
-        type: string
-      activity_time:
-        type: string
-      address:
-        type: string
-      state:
-        type: string
-      summary:
-        type: string
-      signup_number:
-        type: number
-      speaker:
-        type: string
-      type:
-        type: string
-      no:
-        type: string
+  # ActivitySummary:
+  #   type: object
+  #   required:
+  #     - activity_id
+  #     - catena
+  #     - theme
+  #     - activity_time
+  #     - address
+  #     - state
+  #     - summary
+  #     - signup_number
+  #     - speaker
+  #     - type
+  #     - no
+  #   properties:
+  #     activity_id:
+  #       type: string
+  #     catena:
+  #       type: string
+  #     theme:
+  #       type: string
+  #     activity_time:
+  #       type: string
+  #     address:
+  #       type: string
+  #     state:
+  #       type: string
+  #     summary:
+  #       type: string
+  #     signup_number:
+  #       type: number
+  #     speaker:
+  #       type: string
+  #     type:
+  #       type: string
+  #     no:
+  #       type: string
           
-  ActivitiesResponse:
-    required:
-      - activities
-    properties:
-      activities:
-        type: array
-        items: 
-          $ref: "#/definitions/ActivitySummary"
+  # ActivitiesResponse:
+  #   required:
+  #     - activities
+  #   properties:
+  #     activities:
+  #       type: array
+  #       items: 
+  #         $ref: "#/definitions/ActivitySummary"
           
   # symbol:
   #   type: object
@@ -1660,49 +1945,49 @@ definitions:
         items:
           $ref: "#/definitions/journal"
           
-  RecordsResponse:
-    required:
-      - records
-    properties:
-      records:
-        type: array
-        items:
-          $ref: "#/definitions/ActivityRecord"
+  # RecordsResponse:
+  #   required:
+  #     - records
+  #   properties:
+  #     records:
+  #       type: array
+  #       items:
+  #         $ref: "#/definitions/ActivityRecord"
           
-  BillResponse:
-    required:
-      - image_url
-    properties:
-      image_url:
-        type: string
+  # BillResponse:
+  #   required:
+  #     - image_url
+  #   properties:
+  #     image_url:
+  #       type: string
         
-  HonorsGuestResponse:
-    required:
-      - guests
-    properties:
-      guests:
-        type: array
-        items:
-          $ref: "#/definitions/HonorGuest"
+  # HonorsGuestResponse:
+  #   required:
+  #     - guests
+  #   properties:
+  #     guests:
+  #       type: array
+  #       items:
+  #         $ref: "#/definitions/HonorGuest"
           
-  AgendaResponse:
-    required:
-      - image_url
-      - detail
-    properties:
-      image_url:
-        type: string
-      detail:
-        type: string
+  # AgendaResponse:
+  #   required:
+  #     - image_url
+  #     - detail
+  #   properties:
+  #     image_url:
+  #       type: string
+  #     detail:
+  #       type: string
           
-  CollaboratorsResponse:
-    required:
-      - images
-    properties:
-      images:
-        type: array
-        items:
-          type: string
+  # CollaboratorsResponse:
+  #   required:
+  #     - images
+  #   properties:
+  #     images:
+  #       type: array
+  #       items:
+  #         type: string
           
   # SymbolsResponse:
   #   required:
