@@ -1196,6 +1196,27 @@ paths:
           description: success
           schema:
             properties:
+              status:
+                type: string
+              message:
+                type: string
+                
+  /firstpub/raise/{firstpub_id}:
+    post:
+      tags:
+        - Firstpub
+      parameters:
+        - name: firstpub_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: success
+          schema:
+            properties:
+              status:
+                type: string
               message:
                 type: string
             
@@ -1498,10 +1519,8 @@ definitions:
       - cover_img_url
       - summary
       - content
-      - images
-      - audios
-      - videos
-      - read_file_url
+      - raise_count
+      - relative_links
     properties:
       firstpub_id:
         type: string
@@ -1529,53 +1548,56 @@ definitions:
         type: string
       content:
         type: string
-      read_file_url:
+      raise_count:
+        type: integer
+      relative_links:
+        type: array
+        items:
+          $ref: "#/definitions/RelativeLink"
+          
+  RelativeLink:
+    type: object
+    required:
+      - url
+      - link_text
+    properties:
+      url:
         type: string
-      images:
-        type: array
-        items:
-          $ref: "#/definitions/FirstpubImage"
-      audios:
-        type: array
-        items:
-          $ref: "#/definitions/FirstpubAudio"
-      videos:
-        type: array
-        items:
-          $ref: "#/definitions/FirstpubVideo"
+      link_text:
+        type: string
       
-  FirstpubImage:
-    type: object
-    required:
-      - url
-      - content
-    properties:
-      url:
-        type: string
-      content:
-        type: string
+  # FirstpubImage:
+  #   type: object
+  #   required:
+  #     - url
+  #     - content
+  #   properties:
+  #     url:
+  #       type: string
+  #     content:
+  #       type: string
   
-  FirstpubAudio:
-    type: object
-    required:
-      - url
-      - content
-    properties:
-      url:
-        type: string
-      content:
-        type: string
+  # FirstpubAudio:
+  #   type: object
+  #   required:
+  #     - url
+  #     - content
+  #   properties:
+  #     url:
+  #       type: string
+  #     content:
+  #       type: string
         
-  FirstpubVideo:
-    type: object
-    required:
-      - url
-      - content
-    properties:
-      url:
-        type: string
-      content:
-        type: string
+  # FirstpubVideo:
+  #   type: object
+  #   required:
+  #     - url
+  #     - content
+  #   properties:
+  #     url:
+  #       type: string
+  #     content:
+  #       type: string
         
     
   # Activity:
