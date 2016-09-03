@@ -149,6 +149,58 @@ paths:
                     type: string
                   portrait:
                     type: string
+                  user_question:
+                    type: integer
+                  user_activity:
+                    type: integer
+                  user_firstpub:
+                    type: integer
+                  user_basebook:
+                    type: integer
+                  user_book:
+                    type: integer
+                    
+  /user/{user_id}:
+    get:
+      tags:
+        - User
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          type: integer
+      responses:
+        "200":
+          description: 返回当前登录用户的信息, 若不成功则status值不为0, message里包含错误信息
+          schema: 
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              user:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  phone:
+                    type: string
+                  email:
+                    type: string
+                  work_institue:
+                    type: string
+                  portrait:
+                    type: string
+                  user_question:
+                    type: integer
+                  user_activity:
+                    type: integer
+                  user_firstpub:
+                    type: integer
+                  user_basebook:
+                    type: integer
+                  user_book:
+                    type: integer
         
   ##### 入门页 #####
 
